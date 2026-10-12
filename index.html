@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Snapdeal – Online Shopping</title>
+  <meta name="description" content="Snapdeal home page – Diwali offers, Deal of the Day and more.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+/* =========================================================
+   DESIGN TOKENS
+   ========================================================= */
+:root {
+  /* colors */
+  --color-black: #000;
+  --color-white: #fff;
+  --color-text-70: rgba(0, 0, 0, 0.7);
+  --color-text-50: rgba(0, 0, 0, 0.5);
+  --color-text-30: rgba(0, 0, 0, 0.3);
+  --color-topbar: #f1dfe5;
+  --color-primary: #e40046;
+  --color-purple: #734b96;
+  --color-gold-a: #fc0;
+  --color-gold-b: #ffcd03;
+  --color-gold-c: #fcca03;
+  --color-chip: #d9edf7;
+
+  /* typography */
+  --font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --fs-12: 12px;
+  --fs-15: 15px;
+  --fs-18: 18px;
+  --fs-20: 20px;
+  --fs-22: 22px;
+  --fs-25: 25px;
+  --fs-30: 30px;
+  --fs-35: 35px;
+  --fs-60: 60px;
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+
+  /* spacing */
+  --space-2: 2px;
+  --space-6: 6px;
+  --space-9: 9px;
+  --space-15: 15px;
+  --space-19: 19px;
+  --space-25: 25px;
+  --space-50: 50px;
+
+  /* radius */
+  --radius-sm: 5px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+
+  /* layout */
+  --page-width: 1440px;
+  --card-w: 378px;
+  --card-gap: 50px;
+  --hero-inset: 29px;
+}
+
+/* =========================================================
+   BASE
+   ========================================================= */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--color-white);
+  color: var(--color-black);
+  font-family: var(--font-family);
+  font-size: var(--fs-20);
+  font-weight: var(--fw-regular);
+  line-height: normal;
+  -webkit-font-smoothing: antialiased;
+}
+img { display: block; max-width: none; border: 0; }
+ul { margin: 0; padding: 0; list-style: none; }
+h1, h2, h3, p { margin: 0; font-size: inherit; font-weight: inherit; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; padding: 0; border: 0; background: none; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--color-purple); outline-offset: 2px; }
+
+/* The artboard is 1440px wide. Between 1025px and 1439px the whole
+   composition is scaled down proportionally so nothing overflows. */
+.page { width: 100%; max-width: var(--page-width); margin: 0 auto; }
+@media (min-width: 1285px) and (max-width: 1439px) { .page { zoom: 0.88; } }
+@media (min-width: 1157px) and (max-width: 1284px) { .page { zoom: 0.79; } }
+@media (min-width: 1025px) and (max-width: 1156px) { .page { zoom: 0.7; } }
+
+/* shared icon frame (Figma "Frame" with inset artwork) */
+.icon-frame { position: relative; display: block; flex: none; width: 30px; height: 30px; overflow: hidden; }
+.icon-frame--63 { width: 63px; height: 63px; }
+.icon-frame--50 { width: 50px; height: 50px; }
+.icon-frame__inner { position: absolute; }
+.icon-frame__inner img { display: block; width: 100%; height: 100%; }
+.icon-frame__inner--search   { inset: 8.33% 7.47% 7.47% 8.33%; }
+.icon-frame__inner--cart     { inset: 4.17% 7.3% 4.17% 4.17%; }
+.icon-frame__inner--download { inset: 8.33% 16.67%; }
+.icon-frame__inner--return   { inset: 3.13% 3.12% 3.13% 3.13%; }
+.icon-frame__inner--card     { inset: 9.82% 0; }
+
+/* =========================================================
+   HEADER / NAVBAR
+   ========================================================= */
+.site-header {
+  display: grid;
+  grid-template-columns: 213px minmax(0, 1fr) 467px;
+  row-gap: var(--space-19);
+  padding: 0 var(--space-25);
+}
+/* desktop: the menu wrappers dissolve so their children join the header grid */
+.site-menu, .site-menu__inner { display: contents; }
+.nav-toggle { display: none; }
+
+.topbar {
+  grid-row: 1;
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 94px;
+  padding: 4px 18px 0 20px;
+  background: var(--color-topbar);
+  font-size: var(--fs-20);
+}
+.topbar__promos { display: flex; gap: var(--space-25); font-weight: var(--fw-medium); }
+.topbar__links { display: flex; align-items: center; gap: 32px; }
+.topbar__link { display: flex; align-items: center; gap: 7px; }
+.topbar__icon { width: 24px; height: 24px; }
+.topbar__icon--muted { object-fit: cover; opacity: 0.6; }
+
+.brand { grid-row: 2; grid-column: 1; align-self: center; white-space: nowrap; }
+.brand__link { display: flex; align-items: center; gap: var(--space-2); }
+.brand__logo { width: 50px; height: 50px; object-fit: cover; }
+.brand__name { font-size: var(--fs-35); font-weight: var(--fw-bold); }
+
+.search {
+  grid-row: 2;
+  grid-column: 2;
+  display: flex;
+  align-items: center;
+  height: 71px;
+  margin: 0 38px 0 27px;
+  padding-left: 10px;
+  background: var(--color-white);
+  border: 1px solid var(--color-text-50);
+  border-radius: var(--radius-md);
+}
+.search:focus-within { outline: 2px solid var(--color-purple); outline-offset: 2px; }
+.search__input {
+  flex: 1;
+  min-width: 0;
+  margin-left: 17px;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--color-black);
+  font: inherit;
+  font-size: var(--fs-20);
+}
+.search__input::placeholder { color: var(--color-text-70); opacity: 1; }
+
+.account { grid-row: 2; grid-column: 3; display: flex; align-items: flex-start; }
+.account__entry--login { width: 52px; }
+.account__entry--cart { width: 76px; margin-left: 36px; }
+.account__entry--cta { margin-left: 38px; }
+.account__item { display: flex; flex-direction: column; align-items: center; gap: var(--space-9); font-size: var(--fs-20); white-space: nowrap; }
+.account__icon { width: 30px; height: 30px; }
+.account__download {
+  display: flex;
+  align-items: center;
+  width: 265px;
+  height: 71px;
+  padding: 0 0 3px 44px;
+  background: var(--color-primary);
+  border-radius: var(--radius-md);
+  color: var(--color-white);
+  font-size: var(--fs-22);
+  font-weight: var(--fw-semibold);
+}
+
+/* =========================================================
+   DIVIDER + CATEGORIES
+   ========================================================= */
+.divider {
+  margin-top: var(--space-19);
+  padding-left: 42px;
+  overflow: hidden;
+  white-space: nowrap;
+  color: var(--color-text-30);
+  font-size: var(--fs-22);
+  font-weight: var(--fw-semibold);
+}
+.categories { margin-top: var(--space-9); }
+.categories__list {
+  display: grid;
+  grid-template-columns: 196px 223px 196px 213px 180px 1fr;
+  padding-left: 112px;
+}
+.categories__link { display: flex; align-items: center; gap: var(--space-6); }
+.categories__img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
+.categories__label { font-size: var(--fs-18); white-space: nowrap; }
+
+/* =========================================================
+   HERO
+   ========================================================= */
+.hero {
+  position: relative;
+  width: calc(100% - 59px);
+  margin: var(--space-19) 0 0 var(--hero-inset);
+  aspect-ratio: 1381 / 532;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.hero__img { position: absolute; left: 0.06%; top: -4.63%; width: 100%; height: 144.89%; max-width: none; }
+
+/* =========================================================
+   PERKS
+   ========================================================= */
+.perks {
+  width: calc(100% - 59px);
+  height: 206px;
+  margin: 43px 0 0 var(--hero-inset);
+  padding: 47px 0 0 39px;
+  background: var(--color-black);
+  border-radius: var(--radius-lg);
+}
+.perks__list { display: flex; }
+.perk {
+  display: flex;
+  align-items: center;
+  flex: none;
+  width: 380px;
+  height: 111px;
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+}
+.perk--delivery { padding-left: 44px; }
+.perk--return { margin-left: 82px; padding-left: 93px; }
+.perk--quality { margin-left: 80px; padding-left: 78px; }
+.perk__icon { width: 63px; height: 63px; flex: none; }
+.perk__ribbon { display: flex; align-items: center; justify-content: center; flex: none; width: 63.65px; height: 63.65px; }
+.perk__ribbon-img { width: 63px; height: 63px; transform: rotate(-179.41deg); }
+.perk__text { display: flex; flex-direction: column; margin-left: var(--space-15); white-space: nowrap; }
+.perk--quality .perk__text { margin-left: 13.35px; }
+.perk--delivery .perk__text { margin-bottom: 7px; }
+.perk__title { color: var(--color-purple); font-size: var(--fs-20); font-weight: var(--fw-bold); }
+.perk__sub { color: var(--color-black); font-size: var(--fs-18); font-weight: var(--fw-regular); }
+
+/* =========================================================
+   SECTION TITLES
+   ========================================================= */
+.section-title { margin-top: 53px; font-size: var(--fs-60); font-weight: var(--fw-bold); white-space: nowrap; }
+.section-title--deals { margin-left: 506px; }
+.section-title--explore { margin-left: 367px; }
+
+/* =========================================================
+   DEAL OF THE DAY
+   ========================================================= */
+.deals__carousel { position: relative; margin-top: 49px; }
+.deals__grid {
+  display: grid;
+  grid-template-columns: repeat(3, var(--card-w));
+  column-gap: var(--card-gap);
+  align-items: start;
+  padding-left: 84px;
+}
+.deal-card { position: relative; width: var(--card-w); height: 529px; }
+.deal-card--shirt { margin-top: 4px; }
+.deal-card__media {
+  position: absolute;
+  inset: 0;
+  border: 8px solid var(--color-purple);
+  border-radius: var(--radius-md);
+}
+.deal-card__crop { position: absolute; inset: 0; overflow: hidden; border-radius: var(--radius-md); }
+.deal-card__img { position: absolute; max-width: none; }
+.deal-card--pant .deal-card__img { inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.deal-card--makeup .deal-card__img { left: -22.55%; top: -12.58%; width: 144.99%; height: 100%; }
+.deal-card--shirt .deal-card__img { left: -2.16%; top: -19.43%; width: 104.52%; height: 100%; }
+
+.deal-card__info {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 180px;
+  padding-top: 49px;
+  background: var(--color-purple);
+  border-radius: var(--radius-md);
+}
+.deal-card--shirt .deal-card__info { bottom: 4px; }
+.deal-card__title { margin-left: var(--title-x); color: var(--color-white); font-size: var(--fs-25); font-weight: var(--fw-bold); white-space: nowrap; }
+.deal-card__price { margin: 11px 0 0 var(--price-x); color: var(--price-color); font-size: var(--fs-30); font-weight: var(--fw-bold); white-space: nowrap; }
+.deal-card--pant   { --title-x: 46px; --price-x: 85px;  --price-color: var(--color-gold-a); }
+.deal-card--makeup { --title-x: 88px; --price-x: 80px;  --price-color: var(--color-gold-b); }
+.deal-card--shirt  { --title-x: 88px; --price-x: 105px; --price-color: var(--color-gold-c); }
+
+.deals__arrow { position: absolute; top: 224px; width: 90px; height: 90px; z-index: 1; }
+.deals__arrow--prev { left: 25px; }
+.deals__arrow--next { right: 77px; }
+.deals__arrow-bg { width: 100%; height: 100%; }
+.deals__arrow-icon { position: absolute; left: 22.22%; top: 22.22%; width: 55.56%; height: 55.56%; object-fit: cover; }
+.deals__arrow--prev .deals__arrow-icon { transform: rotate(180deg); }
+
+/* =========================================================
+   PRODUCTS
+   ========================================================= */
+.products__grid {
+  display: grid;
+  grid-template-columns: repeat(3, var(--card-w));
+  column-gap: var(--card-gap);
+  row-gap: 147px;
+  margin-top: 104px;
+  padding-left: 84px;
+}
+.product-card { position: relative; width: var(--card-w); height: 700px; }
+.product-card--shifted { margin-left: 10px; }
+.product-card__inner { position: absolute; inset: 0; }
+.product-card__media {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border: 1px solid var(--color-black);
+  border-radius: var(--radius-md);
+}
+.product-card__img {
+  position: absolute;
+  left: var(--crop-l);
+  top: var(--crop-t);
+  width: var(--crop-w);
+  height: var(--crop-h);
+  max-width: none;
+}
+.product-card__info {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: var(--info-bottom);
+  height: 180px;
+  background: var(--color-white);
+  border: 1px solid var(--color-black);
+  border-radius: var(--radius-md);
+}
+.product-card__name { position: absolute; left: var(--name-x); top: var(--name-y); font-size: var(--fs-20); font-weight: var(--fw-medium); white-space: nowrap; }
+.product-card__price { position: absolute; left: var(--price-x); top: var(--price-y); font-size: var(--fs-25); font-weight: var(--fw-bold); white-space: nowrap; }
+.product-card__mrp { position: absolute; left: var(--mrp-x); top: var(--mrp-y); color: var(--color-text-50); font-size: var(--fs-20); white-space: nowrap; }
+.product-card__strike { position: absolute; left: var(--line-x); top: var(--line-y); width: 65px; height: 0; }
+.product-card__strike img { position: absolute; left: 0; top: -1px; width: 100%; height: 1px; }
+.product-card__off { position: absolute; left: var(--off-x); top: var(--off-y); color: var(--color-primary); font-size: var(--fs-20); font-weight: var(--fw-bold); white-space: nowrap; }
+.product-card__rating { position: absolute; left: var(--star-x); top: var(--star-y); width: 30px; height: 30px; }
+.product-card__star { width: 30px; height: 30px; }
+.product-card__rating-text { position: absolute; left: var(--rate-x); top: var(--rate-y); font-size: var(--fs-20); font-weight: var(--fw-semibold); white-space: nowrap; }
+.product-card__rating-text--bold { font-weight: var(--fw-bold); }
+
+/* per-card Figma offsets (generated from the design) */
+.product-card--earbuds{--name-x:15px;--name-y:24px;--price-x:15px;--price-y:60px;--mrp-x:97px;--mrp-y:65px;--line-x:-4px;--line-y:12px;--off-x:173px;--off-y:65px;--star-x:15px;--star-y:101px;--rate-x:38px;--rate-y:6px;--info-bottom:1px;--crop-h:60.97%;--crop-l:-6.35%;--crop-t:11.14%;--crop-w:112.9%}
+.product-card--shoes{--name-x:27px;--name-y:28px;--price-x:27px;--price-y:59px;--mrp-x:108px;--mrp-y:62px;--line-x:0px;--line-y:12px;--off-x:191px;--off-y:65px;--star-x:23px;--star-y:103px;--rate-x:36px;--rate-y:3px;--info-bottom:0px;--crop-h:100%;--crop-l:-12.39%;--crop-t:-19.05%;--crop-w:138.89%}
+.product-card--nuts{--name-x:27px;--name-y:28px;--price-x:27px;--price-y:65px;--mrp-x:116px;--mrp-y:68px;--line-x:-8px;--line-y:13px;--off-x:188px;--off-y:69px;--star-x:21px;--star-y:108px;--rate-x:35px;--rate-y:6px;--info-bottom:0px;--crop-h:100%;--crop-l:-12.11%;--crop-t:-0.01%;--crop-w:144.97%}
+.product-card--perfume{--name-x:13px;--name-y:24px;--price-x:13px;--price-y:65px;--mrp-x:95px;--mrp-y:68px;--line-x:-8px;--line-y:12px;--off-x:173px;--off-y:68px;--star-x:13px;--star-y:106px;--rate-x:31px;--rate-y:5px;--info-bottom:0px;--crop-h:74.14%;--crop-l:-18.55%;--crop-t:0%;--crop-w:137.3%}
+.product-card--drain{--name-x:21px;--name-y:24px;--price-x:21px;--price-y:65px;--mrp-x:102px;--mrp-y:68px;--line-x:-9px;--line-y:12px;--off-x:179px;--off-y:68px;--star-x:21px;--star-y:106px;--rate-x:38px;--rate-y:5px;--info-bottom:0px;--crop-h:60.97%;--crop-l:-6.35%;--crop-t:11.14%;--crop-w:112.9%}
+.product-card--towels{--name-x:14px;--name-y:24px;--price-x:14px;--price-y:65px;--mrp-x:91px;--mrp-y:68px;--line-x:-8px;--line-y:12px;--off-x:169px;--off-y:68px;--star-x:11px;--star-y:106px;--rate-x:37px;--rate-y:5px;--info-bottom:0px;--crop-h:77.08%;--crop-l:-12.84%;--crop-t:0%;--crop-w:129.7%}
+.product-card--cotset{--name-x:8px;--name-y:27px;--price-x:10px;--price-y:65px;--mrp-x:93px;--mrp-y:70px;--line-x:-4px;--line-y:12px;--off-x:169px;--off-y:71px;--star-x:13px;--star-y:109px;--rate-x:30px;--rate-y:5px;--info-bottom:0px;--crop-h:74.33%;--crop-l:-7.18%;--crop-t:-0.04%;--crop-w:137.65%}
+.product-card--tshirt{--name-x:15px;--name-y:27px;--price-x:15px;--price-y:65px;--mrp-x:93px;--mrp-y:70px;--line-x:-8px;--line-y:12px;--off-x:169px;--off-y:70px;--star-x:15px;--star-y:108px;--rate-x:34px;--rate-y:5px;--info-bottom:0px;--crop-h:74.29%;--crop-l:-18.68%;--crop-t:0%;--crop-w:137.57%}
+.product-card--belt{--name-x:15px;--name-y:27px;--price-x:15px;--price-y:65px;--mrp-x:94px;--mrp-y:68px;--line-x:-4px;--line-y:12px;--off-x:174px;--off-y:68px;--star-x:15px;--star-y:112px;--rate-x:36px;--rate-y:5px;--info-bottom:0px;--crop-h:74.43%;--crop-l:-18.81%;--crop-t:0%;--crop-w:137.83%}
+
+.view-more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 693px;
+  height: 100px;
+  margin: 96px auto 0;
+  background: var(--color-primary);
+  border-radius: var(--radius-md);
+  color: var(--color-white);
+  font-size: var(--fs-30);
+  font-weight: var(--fw-bold);
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+.site-footer { margin-top: 334px; padding-bottom: 137px; overflow-x: clip; }
+.footer-cols {
+  display: grid;
+  grid-template-columns: 499px 248px 384px 1fr;
+  height: 252px;
+  padding-left: 51px;
+  align-items: start;
+}
+.footer-col--business { margin-top: 1px; }
+.footer-col__title { margin-bottom: 1.21em; font-size: var(--fs-30); font-weight: var(--fw-semibold); white-space: nowrap; }
+.footer-col__list { font-size: var(--fs-25); }
+.footer-col__link { white-space: nowrap; }
+
+.footer-meta {
+  display: grid;
+  grid-template-columns: 833px 1fr;
+  align-items: start;
+  margin-top: 120px;
+  padding-left: 51px;
+}
+.footer-meta__title { font-size: var(--fs-30); font-weight: var(--fw-bold); }
+.payment { margin-top: 18px; }
+.payment__list { display: flex; align-items: center; gap: var(--space-15); margin-top: 23px; }
+.payment__icon { width: 50px; height: 50px; object-fit: cover; }
+.chip { position: relative; flex: none; width: 77px; height: 40px; background: var(--color-chip); border-radius: var(--radius-sm); font-size: var(--fs-12); }
+.chip__symbol { position: absolute; left: 8px; top: 14px; font-size: var(--fs-15); }
+.chip__icon { position: absolute; left: 8px; top: 14px; width: 12px; height: 12px; }
+.chip__text { position: absolute; left: 20px; top: 5px; white-space: pre; }
+.chip--net .chip__text { left: 23px; }
+.contact__list { display: flex; align-items: center; margin-top: 29px; }
+.contact__list li:nth-child(2), .contact__list li:nth-child(3), .contact__list li:nth-child(6) { margin-left: 32px; }
+.contact__list li:nth-child(4), .contact__list li:nth-child(5) { margin-left: 25px; }
+.contact__icon { width: 50px; height: 50px; }
+
+.seo { margin: 136px 0 0 44px; font-size: var(--fs-30); font-weight: var(--fw-regular); white-space: nowrap; }
+.seo__block { margin-bottom: 28px; }
+.seo__block:last-child { margin-bottom: 0; }
+.seo__label { font-weight: var(--fw-bold); }
+.seo__line { display: block; }
+.seo__line--first { display: inline; }
+
+/* =========================================================
+   TABLET  (max-width: 1024px)
+   ========================================================= */
+@media (max-width: 1024px) {
+  /* ---- navbar: hamburger + collapsible menu ---- */
+  .site-header {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    column-gap: 16px;
+    row-gap: 0;
+    align-items: center;
+    padding: 16px 24px 0;
+  }
+  .brand { grid-row: 1; grid-column: 1; }
+  .brand__logo { width: 40px; height: 40px; }
+  .brand__name { font-size: 28px; }
+  .search { grid-row: 1; grid-column: 2; height: 52px; margin: 0; }
+  .search__input { font-size: var(--fs-18); }
+
+  .nav-toggle {
+    grid-row: 1;
+    grid-column: 3;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    width: 52px;
+    height: 52px;
+    background: var(--color-white);
+    border: 1px solid var(--color-text-50);
+    border-radius: var(--radius-md);
+  }
+  .nav-toggle__bar {
+    display: block;
+    width: 24px;
+    height: 3px;
+    background: var(--color-black);
+    border-radius: 2px;
+    transition: transform 0.3s ease, opacity 0.2s ease;
+  }
+  .nav-toggle[aria-expanded="true"] .nav-toggle__bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+  .nav-toggle[aria-expanded="true"] .nav-toggle__bar:nth-child(2) { opacity: 0; }
+  .nav-toggle[aria-expanded="true"] .nav-toggle__bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+  .site-menu {
+    grid-row: 2;
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-rows: 0fr;
+    visibility: hidden;
+    transition: grid-template-rows 0.35s ease, visibility 0s linear 0.35s;
+  }
+  .site-menu.is-open {
+    grid-template-rows: 1fr;
+    visibility: visible;
+    transition: grid-template-rows 0.35s ease, visibility 0s linear 0s;
+  }
+  .site-menu__inner { display: block; min-height: 0; overflow: hidden; }
+
+  .topbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    height: auto;
+    margin-top: 16px;
+    padding: 16px;
+    border-radius: var(--radius-md);
+    font-size: var(--fs-18);
+  }
+  .topbar__promos { flex-wrap: wrap; gap: 8px 20px; }
+  .topbar__links { flex-wrap: wrap; gap: 8px 24px; }
+  .account { flex-wrap: wrap; align-items: center; gap: 16px 28px; padding: 16px 0 8px; }
+  .account__entry--login, .account__entry--cart { width: auto; }
+  .account__entry--cart, .account__entry--cta { margin-left: 0; }
+
+  /* ---- content ---- */
+  .divider { padding-left: 24px; }
+  .categories__list { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px 12px; padding: 0 24px; }
+  .categories__label { white-space: normal; }
+
+  .hero { width: calc(100% - 48px); margin-left: 24px; }
+  .perks { width: calc(100% - 48px); height: auto; margin-left: 24px; padding: 24px; }
+  .perks__list { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+  .perk, .perk--return, .perk--quality { width: 100%; margin-left: 0; padding-left: 24px; }
+
+  .section-title { margin: 48px 24px 0; font-size: 40px; text-align: center; white-space: normal; }
+  .section-title--deals, .section-title--explore { margin-left: 24px; }
+
+  .deals__carousel { margin-top: 32px; }
+  .deals__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 16px; padding: 0 24px; }
+  .deal-card { width: 100%; height: auto; aspect-ratio: 378 / 529; }
+  .deal-card--shirt { margin-top: 0; }
+  .deal-card__media { border-width: 6px; }
+  .deal-card__info, .deal-card--shirt .deal-card__info { bottom: 0; height: 34%; padding: 0 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+  .deal-card__title, .deal-card__price { margin-left: 0; white-space: normal; }
+  .deal-card__title { font-size: var(--fs-18); }
+  .deal-card__price { margin-top: 6px; font-size: var(--fs-22); }
+  .deals__arrow { top: 50%; width: 56px; height: 56px; margin-top: -28px; }
+  .deals__arrow--prev { left: 4px; }
+  .deals__arrow--next { right: 4px; }
+
+  .products__grid { grid-template-columns: repeat(2, minmax(0, var(--card-w))); justify-content: center; gap: 32px 24px; margin-top: 32px; padding: 0 24px; }
+  .product-card, .product-card--shifted { width: 100%; height: auto; margin-left: 0; aspect-ratio: 378 / 700; }
+  .product-card__info {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    align-content: center;
+    gap: 4px 12px;
+    height: auto;
+    min-height: 180px;
+    padding: 16px;
+  }
+  .product-card__name, .product-card__price, .product-card__mrp, .product-card__off, .product-card__rating, .product-card__rating-text { position: static; }
+  .product-card__name { flex: 0 0 100%; overflow: hidden; text-overflow: ellipsis; }
+  .product-card__mrp { position: relative; }
+  .product-card__strike { left: -3px; top: 12px; }
+  .product-card__rating { display: flex; align-items: center; flex: 0 0 100%; gap: 8px; width: auto; height: auto; }
+
+  .view-more { width: calc(100% - 48px); max-width: 693px; margin-top: 48px; }
+
+  .site-footer { margin-top: 64px; padding-bottom: 64px; }
+  .footer-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px 24px; height: auto; padding: 0 24px; }
+  .footer-col--business { margin-top: 0; }
+  .footer-meta { grid-template-columns: 1fr; gap: 40px; margin-top: 48px; padding: 0 24px; }
+  .payment { margin-top: 0; }
+  .payment__list { flex-wrap: wrap; }
+  .contact__list { flex-wrap: wrap; gap: 16px; }
+  .contact__list li { margin-left: 0 !important; }
+  .seo { margin: 48px 24px 0; font-size: var(--fs-22); white-space: normal; }
+  .seo__block { margin-bottom: 20px; }
+  .seo__line, .seo__line--first { display: inline; }
+}
+
+/* =========================================================
+   MOBILE  (max-width: 768px)
+   ========================================================= */
+@media (max-width: 768px) {
+  .site-header { column-gap: 12px; padding: 12px 16px 0; }
+  .brand { grid-row: 1; grid-column: 1; }
+  .nav-toggle { grid-row: 1; grid-column: 3; width: 46px; height: 46px; }
+  .search { grid-row: 2; grid-column: 1 / -1; height: 48px; margin-top: 12px; }
+  .site-menu { grid-row: 3; }
+  .topbar__promos, .topbar__links { flex-direction: column; align-items: flex-start; }
+  .account { gap: 16px 20px; }
+
+  .divider { padding-left: 16px; font-size: var(--fs-18); }
+  .categories__list { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 0 16px; }
+
+  .hero { width: calc(100% - 32px); margin-left: 16px; }
+  .perks { width: calc(100% - 32px); margin: 32px 0 0 16px; padding: 16px; border-radius: var(--radius-md); }
+  .perks__list { grid-template-columns: 1fr; }
+
+  .section-title { margin: 40px 16px 0; font-size: 30px; }
+  .section-title--deals, .section-title--explore { margin-left: 16px; }
+
+  .deals__grid { grid-template-columns: minmax(0, var(--card-w)); justify-content: center; row-gap: 16px; padding: 0 16px; }
+  .deal-card__title { font-size: var(--fs-20); }
+  .deal-card__price { font-size: var(--fs-25); }
+
+  .products__grid { grid-template-columns: minmax(0, var(--card-w)); gap: 24px; padding: 0 16px; }
+  .view-more { width: calc(100% - 32px); height: 72px; font-size: var(--fs-25); }
+
+  .footer-cols { grid-template-columns: 1fr; padding: 0 16px; }
+  .footer-col__title { font-size: 24px; }
+  .footer-col__list { font-size: var(--fs-20); }
+  .footer-col__link { white-space: normal; }
+  .footer-meta { padding: 0 16px; }
+  .footer-meta__title { font-size: 24px; }
+  .seo { margin: 40px 16px 0; font-size: var(--fs-18); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-menu, .site-menu.is-open, .nav-toggle__bar { transition: none; }
+}
+
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ============ HEADER / NAVBAR ============ -->
+  <header class="site-header">
+    <h1 class="brand">
+      <a class="brand__link" href="#">
+        <img class="brand__logo" src="assets/images/logo.png" alt="Snapdeal logo" width="50" height="50">
+        <span class="brand__name">Snapdeal</span>
+      </a>
+    </h1>
+
+    <form class="search" role="search" action="#">
+      <span class="icon-frame" aria-hidden="true"><span class="icon-frame__inner icon-frame__inner--search"><img src="assets/images/icon-search.svg" alt=""></span></span>
+      <input class="search__input" type="search" name="q" placeholder="Search for Brands and Products" aria-label="Search for Brands and Products">
+    </form>
+
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-menu" aria-label="Toggle navigation menu">
+      <span class="nav-toggle__bar"></span>
+      <span class="nav-toggle__bar"></span>
+      <span class="nav-toggle__bar"></span>
+    </button>
+
+    <nav class="site-menu" id="site-menu" aria-label="Primary">
+      <div class="site-menu__inner">
+        <div class="topbar">
+          <ul class="topbar__promos">
+            <li class="topbar__promo">FREE Delivery</li>
+            <li class="topbar__promo">7 Days Easy Return</li>
+            <li class="topbar__promo">Best Prices</li>
+          </ul>
+          <ul class="topbar__links">
+            <li><a class="topbar__link" href="#"><img class="topbar__icon" src="assets/images/icon-blogger.svg" alt="Blogger logo" width="24" height="24"><span>Our Blog</span></a></li>
+            <li><a class="topbar__link" href="#"><img class="topbar__icon topbar__icon--muted" src="assets/images/icon-help.png" alt="Help center icon" width="24" height="24"><span>Help Center</span></a></li>
+            <li><a class="topbar__link" href="#"><img class="topbar__icon topbar__icon--muted" src="assets/images/icon-sell.png" alt="Sell on Snapdeal icon" width="24" height="24"><span>Sell on Snapdeal</span></a></li>
+          </ul>
+        </div>
+
+        <ul class="account">
+          <li class="account__entry account__entry--login">
+            <a class="account__item" href="#">
+              <img class="account__icon" src="assets/images/icon-user.svg" alt="" width="30" height="30">
+              <span>Login</span>
+            </a>
+          </li>
+          <li class="account__entry account__entry--cart">
+            <a class="account__item" href="#">
+              <span class="icon-frame" aria-hidden="true"><span class="icon-frame__inner icon-frame__inner--cart"><img src="assets/images/icon-cart.svg" alt=""></span></span>
+              <span>My Cart</span>
+            </a>
+          </li>
+          <li class="account__entry account__entry--cta">
+            <a class="account__download" href="#">
+              <span class="icon-frame" aria-hidden="true"><span class="icon-frame__inner icon-frame__inner--download"><img src="assets/images/icon-download.svg" alt=""></span></span>
+              <span>Download App</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div class="divider" aria-hidden="true">--------------------------------------------------------------------------------------------------------------------------------------</div>
+
+    <!-- ============ CATEGORIES ============ -->
+    <nav class="categories" aria-label="Shop by category">
+      <ul class="categories__list">
+        <li class="categories__item"><a class="categories__link" href="#"><img class="categories__img" src="assets/images/category-mens-fashion.png" alt="Men’s fashion" width="50" height="50"><span class="categories__label">Men’s Fashion</span></a></li>
+        <li class="categories__item"><a class="categories__link" href="#"><img class="categories__img" src="assets/images/category-womens-fashion.png" alt="Women’s fashion" width="50" height="50"><span class="categories__label">Women’s Fashion</span></a></li>
+        <li class="categories__item"><a class="categories__link" href="#"><img class="categories__img" src="assets/images/category-kitchen-set.png" alt="Kitchen set" width="50" height="50"><span class="categories__label">Kitchen Set</span></a></li>
+        <li class="categories__item"><a class="categories__link" href="#"><img class="categories__img" src="assets/images/category-beauty-health.png" alt="Beauty and health" width="50" height="50"><span class="categories__label">Beauty &amp; Health</span></a></li>
+        <li class="categories__item"><a class="categories__link" href="#"><img class="categories__img" src="assets/images/category-electronics.png" alt="Electronics" width="50" height="50"><span class="categories__label">Electronices</span></a></li>
+        <li class="categories__item"><a class="categories__link" href="#"><img class="categories__img" src="assets/images/category-sports-fitness.png" alt="Sports and fitness" width="50" height="50"><span class="categories__label">Sports &amp; Fitness</span></a></li>
+      </ul>
+    </nav>
+
+    <!-- ============ HERO ============ -->
+    <section class="hero" aria-label="Shubh Diwali offer">
+      <img class="hero__img" src="assets/images/hero-diwali.png" alt="Shubh Diwali Grand Diwali Offer – up to 50% off on fashion, home decor and electronics">
+    </section>
+
+    <!-- ============ PERKS ============ -->
+    <section class="perks" aria-label="Why shop with Snapdeal">
+      <ul class="perks__list">
+        <li class="perk perk--delivery">
+          <img class="perk__icon" src="assets/images/icon-delivery.svg" alt="Delivery truck" width="63" height="63">
+          <p class="perk__text"><strong class="perk__title">FREE Delivery</strong><span class="perk__sub">on all Orders</span></p>
+        </li>
+        <li class="perk perk--return">
+          <span class="icon-frame icon-frame--63" aria-hidden="true"><span class="icon-frame__inner icon-frame__inner--return"><img src="assets/images/icon-return.svg" alt=""></span></span>
+          <p class="perk__text"><strong class="perk__title">7 Days</strong><span class="perk__sub">Easy Return </span></p>
+        </li>
+        <li class="perk perk--quality">
+          <span class="perk__ribbon"><img class="perk__ribbon-img" src="assets/images/icon-quality.svg" alt="Quality ribbon" width="63" height="63"></span>
+          <p class="perk__text"><strong class="perk__title">Great Quality at</strong><span class="perk__sub">Best Prices</span></p>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ============ DEAL OF THE DAY ============ -->
+    <section class="deals" aria-labelledby="deals-title">
+      <h2 class="section-title section-title--deals" id="deals-title">Deal Of The Day</h2>
+      <div class="deals__carousel">
+        <button class="deals__arrow deals__arrow--prev" type="button" aria-label="Previous deals">
+          <img class="deals__arrow-bg" src="assets/images/arrow-circle.svg" alt="">
+          <img class="deals__arrow-icon" src="assets/images/arrow.png" alt="">
+        </button>
+        <button class="deals__arrow deals__arrow--next" type="button" aria-label="Next deals">
+          <img class="deals__arrow-bg" src="assets/images/arrow-circle.svg" alt="">
+          <img class="deals__arrow-icon" src="assets/images/arrow.png" alt="">
+        </button>
+        <ul class="deals__grid">
+          <li class="deal-card deal-card--pant">
+            <div class="deal-card__media"><div class="deal-card__crop"><img class="deal-card__img deal-card__img--cover" src="assets/images/deal-womens-korean-pant.png" alt="Woman wearing Korean style pants" loading="lazy"></div></div>
+            <div class="deal-card__info"><h3 class="deal-card__title">Women’s Korean Pant</h3><p class="deal-card__price">UNDER ₹349</p></div>
+          </li>
+          <li class="deal-card deal-card--makeup">
+            <div class="deal-card__media"><div class="deal-card__crop"><img class="deal-card__img" src="assets/images/deal-makeup.png" alt="Assorted makeup products" loading="lazy"></div></div>
+            <div class="deal-card__info"><h3 class="deal-card__title">Makeup Product</h3><p class="deal-card__price">STARTING ₹99</p></div>
+          </li>
+          <li class="deal-card deal-card--shirt">
+            <div class="deal-card__media"><div class="deal-card__crop"><img class="deal-card__img" src="assets/images/deal-mens-shirt.png" alt="Man wearing a printed shirt" loading="lazy"></div></div>
+            <div class="deal-card__info"><h3 class="deal-card__title">Men’s Printed Shirt</h3><p class="deal-card__price">UNDER ₹299</p></div>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ EXPLORE MORE ============ -->
+    <section class="products" aria-labelledby="explore-title">
+      <h2 class="section-title section-title--explore" id="explore-title">Explore More On Snapdeal</h2>
+      <ul class="products__grid">
+        <li class="product-card product-card--earbuds">
+          <article class="product-card__inner">
+            <div class="product-card__media"><img class="product-card__img" src="assets/images/product-earbuds.png" alt="Black wireless Bluetooth earbuds with charging case" loading="lazy"></div>
+            <div class="product-card__info">
+              <h3 class="product-card__name">Life Like A10 PRO 2 Bluetooth....</h3>
+              <p class="product-card__price">₹269</p>
+              <p class="product-card__mrp">₹1499<span class="product-card__strike" aria-hidden="true"><img src="assets/images/strike-line.svg" alt=""></span></p>
+              <p class="product-card__off">82% off</p>
+              <p class="product-card__rating"><img class="product-card__star" src="assets/images/icon-star.svg" alt="Rating" width="30" height="30"><span class="product-card__rating-text">3.8/5</span></p>
+            </div>
+          </article>
+        </li>
+        <li class="product-card product-card--shoes">
+          <article class="product-card__inner">
+            <div class="product-card__media"><img class="product-card__img" src="assets/images/product-shoes.png" alt="Men’s white sports shoes with blue and grey accents" loading="lazy"></div>
+            <div class="product-card__info">
+              <h3 class="product-card__name">Men’s White Shoes</h3>
+              <p class="product-card__price">₹549</p>
+              <p class="product-card__mrp">₹1000<span class="product-card__strike" aria-hidden="true"><img src="assets/images/strike-line.svg" alt=""></span></p>
+              <p class="product-card__off">81% off</p>
+              <p class="product-card__rating"><img class="product-card__star" src="assets/images/icon-star.svg" alt="Rating" width="30" height="30"><span class="product-card__rating-text">3.8/5</span></p>
+            </div>
+          </article>
+        </li>
+        <li class="product-card product-card--nuts product-card--shifted">
+          <article class="product-card__inner">
+            <div class="product-card__media"><img class="product-card__img" src="assets/images/product-nuts.png" alt="Pack of organic mixed nuts and seeds" loading="lazy"></div>
+            <div class="product-card__info">
+              <h3 class="product-card__name">Organic Mixed Nuts ANd Seeda</h3>
+              <p class="product-card__price">₹202</p>
+              <p class="product-card__mrp">₹500<span class="product-card__strike" aria-hidden="true"><img src="assets/images/strike-line-alt.svg" alt=""></span></p>
+              <p class="product-card__off">66% off</p>
+              <p class="product-card__rating"><img class="product-card__star" src="assets/images/icon-star.svg" alt="Rating" width="30" height="30"><span class="product-card__rating-text">3.5/5</span></p>
+            </div>
+          </article>
+        </li>
+        <li class="product-card product-card--perfume">
+          <article class="product-card__inner">
+            <div class="product-card__media"><img class="product-card__img" src="assets/images/product-perfume.png" alt="Set of Shiki Eau De Parfum bottles" loading="lazy"></div>
+            <div class="product-card__info">
+              <h3 class="product-card__name">Shiki Eau De Parfum (EDP) uniset..</h3>
+              <p class="product-card__price">₹149</p>
+              <p class="product-card__mrp">₹699<span class="product-card__strike" aria-hidden="true"><img src="assets/images/strike-line.svg" alt=""></span></p>
+              <p class="product-card__off">79% off</p>
+              <p class="product-card__rating"><img class="product-card__star" src="assets/images/icon-star.svg" alt="Rating" width="30" height="30"><span class="product-card__rating-text">4/5</span></p>
+            </div>
+          </article>
+        </li>
+        <li class="product-card product-card--drain">
+          <article class="product-card__inner">
+            <div class="product-card__media"><img class="product-card__img" src="assets/images/product-drain.png" alt="Stainless steel sink drain strainers" loading="lazy"></div>
+            <div class="product-card__info">
+              <h3 class="product-card__name">SYON Stainless Steel Drain</h3>
+              <p class="product-card__price">₹159</p>
+              <p class="product-card__mrp">₹599<span class="product-card__strike" aria-hidden="true"><img src="assets/images/strike-line.svg" alt=""></span></p>
+              <p class="product-card__off">75% off</p>
+              <p class="product-card__rating"><img class="product-card__star" src="assets/images/icon-star.svg" alt="Rating" width="30" height="30"><span class="product-card__rating-text product-card__rating-text--bold">3/5</span></p>
+            </div>
+          </article>
+        </li>
+        <li class="product-card product-card--towels product-card--shifted">
+          <article class="product-card__inner">
+            <div class="product-card__media"><img class="product-card__img" src="assets/images/product-towels.png" alt="Folded blue cotton kitchen towels" loading="lazy"></div>
+            <div class="product-card__info">
+              <h3 class="product-card__name">x20 Set of 10 Cotton Kitchen </h3>
+              <p class="product-card__price">₹181</p>
+              <p class="product-card__mrp">₹899<span class="product-card__strike" aria-hidden="true"><img src="assets/images/strike-line.svg" alt=""></span></p>
+              <p class="product-card__off">80% off</p>
+              <p class="product-card__rating"><img class="product-card__star" src="assets/images/icon-star.svg" alt="Rating" width="30" height="30"><span class="product-card__rating-text product-card__rating-text--bold">4/5</span></p>
+            </div>
+          </article>
+        </li>
+        <li class="product-card product-card--cotset">
+          <article class="product-card__inner">
+            <div class="product-card__media"><img class="product-card__img" src="assets/images/product-cot-set.png" alt="Woman wearing a cotton cot set" loading="lazy"></div>
+            <div class="product-card__info">
+              <h3 class="product-card__name">Women Cotton Cot Set</h3>
+              <p class="product-card__price">₹250</p>
+              <p class="product-card__mrp">₹1400<span class="product-card__strike" aria-hidden="true"><img src="assets/images/strike-line.svg" alt=""></span></p>
+              <p class="product-card__off">88% off</p>
+              <p class="product-card__rating"><img class="product-card__star" src="assets/images/icon-star.svg" alt="Rating" width="30" height="30"><span class="product-card__rating-text">4/5</span></p>
+            </div>
+          </article>
+        </li>
+        <li class="product-card product-card--tshirt">
+          <article class="product-card__inner">
+            <div class="product-card__media"><img class="product-card__img" src="assets/images/product-tshirt.png" alt="Man wearing a cotton T-shirt" loading="lazy"></div>
+            <div class="product-card__info">
+              <h3 class="product-card__name">Men’s Cotton T-shirt</h3>
+              <p class="product-card__price">₹219</p>
+              <p class="product-card__mrp">₹499<span class="product-card__strike" aria-hidden="true"><img src="assets/images/strike-line.svg" alt=""></span></p>
+              <p class="product-card__off">56% off</p>
+              <p class="product-card__rating"><img class="product-card__star" src="assets/images/icon-star.svg" alt="Rating" width="30" height="30"><span class="product-card__rating-text">3.7/5</span></p>
+            </div>
+          </article>
+        </li>
+        <li class="product-card product-card--belt">
+          <article class="product-card__inner">
+            <div class="product-card__media"><img class="product-card__img" src="assets/images/product-belt.png" alt="Black leather men’s belt" loading="lazy"></div>
+            <div class="product-card__info">
+              <h3 class="product-card__name">Loopa-Black Leather Men’s Belt</h3>
+              <p class="product-card__price">₹145</p>
+              <p class="product-card__mrp">₹1000<span class="product-card__strike" aria-hidden="true"><img src="assets/images/strike-line.svg" alt=""></span></p>
+              <p class="product-card__off">87% off</p>
+              <p class="product-card__rating"><img class="product-card__star" src="assets/images/icon-star.svg" alt="Rating" width="30" height="30"><span class="product-card__rating-text">4.1/5</span></p>
+            </div>
+          </article>
+        </li>
+      </ul>
+      <button class="view-more" type="button">View More</button>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="site-footer">
+    <div class="footer-cols">
+      <section class="footer-col footer-col--policy">
+        <h2 class="footer-col__title">Policy Information</h2>
+        <ul class="footer-col__list">
+          <li><a class="footer-col__link" href="#">Privacy Policy</a></li>
+          <li><a class="footer-col__link" href="#">Terms of Sale</a></li>
+          <li><a class="footer-col__link" href="#">Terms of Use</a></li>
+          <li><a class="footer-col__link" href="#">Report Abuse &amp; Takedown Policy</a></li>
+          <li><a class="footer-col__link" href="#">Know Your BIS Standard</a></li>
+          <li><a class="footer-col__link" href="#">FAQ</a></li>
+        </ul>
+      </section>
+      <section class="footer-col footer-col--company">
+        <h2 class="footer-col__title">Company</h2>
+        <ul class="footer-col__list">
+          <li><a class="footer-col__link" href="#">About Us</a></li>
+          <li><a class="footer-col__link" href="#">Careers</a></li>
+          <li><a class="footer-col__link" href="#">Blog</a></li>
+          <li><a class="footer-col__link" href="#">Sitemap</a></li>
+          <li><a class="footer-col__link" href="#">Contact Us</a></li>
+        </ul>
+      </section>
+      <section class="footer-col footer-col--business">
+        <h2 class="footer-col__title">Snapdeal Business</h2>
+        <ul class="footer-col__list">
+          <li><a class="footer-col__link" href="#">Shopping App</a></li>
+          <li><a class="footer-col__link" href="#">Sell on Snapdeal</a></li>
+          <li><a class="footer-col__link" href="#">Media Enquiries</a></li>
+        </ul>
+      </section>
+      <section class="footer-col footer-col--popular">
+        <h2 class="footer-col__title">Popular Links</h2>
+        <ul class="footer-col__list">
+          <li><a class="footer-col__link" href="#">Lehenga</a></li>
+          <li><a class="footer-col__link" href="#">Kid's Clothing</a></li>
+          <li><a class="footer-col__link" href="#">Sarees</a></li>
+          <li><a class="footer-col__link" href="#">Winter Wear</a></li>
+          <li><a class="footer-col__link" href="#">Sweatshirts</a></li>
+        </ul>
+      </section>
+    </div>
+
+    <div class="footer-meta">
+      <section class="payment">
+        <h2 class="footer-meta__title">Payment</h2>
+        <ul class="payment__list">
+          <li><span class="icon-frame icon-frame--50" aria-hidden="true"><span class="icon-frame__inner icon-frame__inner--card"><img src="assets/images/icon-credit-card.svg" alt=""></span></span></li>
+          <li><img class="payment__icon" src="assets/images/icon-debit-card.png" alt="Debit card" width="50" height="50"></li>
+          <li class="chip"><span class="chip__symbol">₹</span><span class="chip__text">Cash on<br> delivery</span></li>
+          <li class="chip chip--net"><img class="chip__icon" src="assets/images/icon-netbanking.svg" alt="" width="12" height="12"><span class="chip__text">Net <br>Banking</span></li>
+        </ul>
+      </section>
+      <section class="contact">
+        <h2 class="footer-meta__title">Contact</h2>
+        <ul class="contact__list">
+          <li><a href="#"><img class="contact__icon" src="assets/images/social-facebook.png" alt="Facebook" width="50" height="50"></a></li>
+          <li><a href="#"><img class="contact__icon" src="assets/images/social-twitter.png" alt="Twitter" width="50" height="50"></a></li>
+          <li><a href="#"><img class="contact__icon" src="assets/images/social-instagram.png" alt="Instagram" width="50" height="50"></a></li>
+          <li><a href="#"><img class="contact__icon" src="assets/images/social-linkedin.svg" alt="LinkedIn" width="50" height="50"></a></li>
+          <li><a href="#"><img class="contact__icon" src="assets/images/social-youtube.svg" alt="YouTube" width="50" height="50"></a></li>
+          <li><a href="#"><img class="contact__icon" src="assets/images/social-telegram.svg" alt="Telegram" width="50" height="50"></a></li>
+        </ul>
+      </section>
+    </div>
+
+    <section class="seo" aria-label="Popular searches">
+        <p class="seo__block">
+          <strong class="seo__label">Men's Fashion:</strong><span class="seo__line seo__line--first">Shirts for Men,Casual Shirts for Men,Formal Shirts for Men.Hoodies for Men,</span>
+          <span class="seo__line">Cotton Shirts for Men,T-Shirts for Men,Polo T-Shirts,Kurta Pajama for Men,White Shirt,Black</span>
+          <span class="seo__line">Shirt,Lower for Men,Trousers for Men,Jacket for Men,Formal Pants for Men,Tracksuit for Men</span>
+          <span class="seo__line">Jeans for Men,Kurta Pajama Sets,Kurta for Men,Sweater for Men</span>
+        </p>
+        <p class="seo__block">
+          <strong class="seo__label">Women's Fashion:</strong><span class="seo__line seo__line--first">Tops for Women,Kurti,Cotton Sarees,Georgette Sarees,Chiffon Sarees,Net </span>
+          <span class="seo__line">Sarees,Dresses for Women,Jumpsuit for Women,Jeans for Women,Salwar Suit,Jacket for </span>
+          <span class="seo__line">Women,Night Dress for Women,Sweatshirt for Women,Shorts for Women,Blouse,Dupatta,T-Shirt</span>
+          <span class="seo__line">for Women,Shirts for Women,Skirts for Women,Ethnic Wear for Women,Ethnic Bottomwear.</span>
+        </p>
+        <p class="seo__block">
+          <strong class="seo__label">Footwear:</strong><span class="seo__line seo__line--first">Men's Footwear,Casual Shoes for Men,Formal Shoes for Men,Loafers for Men,Slippers</span>
+          <span class="seo__line">for Men,Boots for Men,Sandals for Men,Footwear for Women,Heels for Women,Sandals for </span>
+          <span class="seo__line">Women,Shoes for Women,Slippers for Women,Boots for Women,Jutti for Women,Sports Shoes for</span>
+          <span class="seo__line">Women.</span>
+        </p>
+        <p class="seo__block">
+          <strong class="seo__label">Home &amp; Kitchen:</strong><span class="seo__line seo__line--first">Wall Painting,Wall Stickers,Dream Catcher,Rangoli Designs,Clock,Wall Clock</span>
+          <span class="seo__line">Alarm Clock,Diya,Wall Hanging,Hanging &amp; Ceiling Light,Table Lamp,Hanging Lights,LED Bulbs,</span>
+          <span class="seo__line">Torch Light,Flower Vase,Keychain,Rudraksha,Screwdriver</span>
+        </p>
+        <p class="seo__block">
+          <strong class="seo__label">Watches:</strong><span class="seo__line seo__line--first">Watch for Men,Women's Watches,Smart Watch,Boys Watch,Girls Watch</span>
+
+        </p>
+    </section>
+  </footer>
+
+</div>
+<script>
+(function () {
+  var toggle = document.querySelector('.nav-toggle');
+  var menu = document.getElementById('site-menu');
+  if (!toggle || !menu) return;
+
+  function setOpen(open) {
+    toggle.setAttribute('aria-expanded', String(open));
+    menu.classList.toggle('is-open', open);
+  }
+
+  toggle.addEventListener('click', function () {
+    setOpen(toggle.getAttribute('aria-expanded') !== 'true');
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+      setOpen(false);
+      toggle.focus();
+    }
+  });
+
+  window.matchMedia('(min-width: 1025px)').addEventListener('change', function (e) {
+    if (e.matches) setOpen(false);
+  });
+})();
+
+</script>
+</body>
+</html>
